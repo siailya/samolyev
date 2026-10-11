@@ -1,7 +1,7 @@
 FROM nginxinc/nginx-unprivileged:1.28.0-alpine-slim
 LABEL org.opencontainers.image.source="https://github.com/siailya/samolyev"
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY index.html style.css init.js language.js THIRD_PARTY_LICENSES.txt /usr/share/nginx/html/
+COPY favicon.ico favicon.png index.html style.css init.js language.js THIRD_PARTY_LICENSES.txt /usr/share/nginx/html/
 COPY en/index.html en/experience.html /usr/share/nginx/html/en/
 COPY ru/index.html ru/experience.html /usr/share/nginx/html/ru/
 USER 101

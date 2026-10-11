@@ -1,3 +1,38 @@
+@property --background {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f3f0e8;
+}
+@property --text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #26343a;
+}
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #58686c;
+}
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #79602e;
+}
+@property --planet {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #819296;
+}
+@property --surface {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ebe8df;
+}
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #c7cdca;
+}
 :root {
   --background: #f3f0e8;
   --text: #26343a;
@@ -160,6 +195,14 @@ h1 {
 .skills strong {
   color: var(--text);
   font-weight: 500;
+}
+.skills .skill-accent {
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.skills-summary {
+  margin: 24px 0 0;
 }
 section.experience {
   border-top: 1px solid var(--border);
@@ -324,13 +367,13 @@ article ul {
   gap: 20px;
 }
 .theme-control {
+  position: relative;
   width: 36px;
   height: 36px;
   padding: 8px;
   color: var(--muted);
   background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  border: 0;
   cursor: pointer;
 }
 .theme-control:not([hidden]) {
@@ -338,14 +381,48 @@ article ul {
   align-items: center;
   justify-content: center;
 }
-.theme-control:hover {
-  color: var(--text);
-  background: var(--surface);
+.theme-control:hover,
+.theme-control:focus-visible {
+  color: var(--accent);
 }
 .theme-control:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline: none;
 }
+.theme-control:focus-visible::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 3px;
+  left: 10px;
+  height: 2px;
+  background: var(--accent);
+}
+.theme-control svg {
+  flex-shrink: 0;
+  animation: theme-icon-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes theme-icon-in {
+  from {
+    opacity: 0.65;
+    transform: rotate(-12deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Interpolate the shared palette once, including colors inside the ASCII planet. */
+:root {
+  transition:
+    --background 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --text 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --muted 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --accent 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --planet 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --surface 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    --border 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 footer {
   display: flex;
   flex-wrap: wrap;
