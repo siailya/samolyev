@@ -182,6 +182,13 @@ test("container has an explicit public asset allowlist and CI publishes only aft
   const docker = fs.readFileSync("Dockerfile", "utf8");
   assert.match(docker, /FROM nginxinc\/nginx-unprivileged:1\.28\.0-alpine-slim/);
   assert.match(docker, /USER 101/);
+  assert.match(docker, /ARG SITE_REVISION=unknown/);
+  assert.match(docker, /org.opencontainers.image.revision="\$SITE_REVISION"/);
+  assert.ok(
+    docker.includes(
+      "USER 0\nRUN printf '%s\\n' \"$SITE_REVISION\" > /usr/share/nginx/html/revision.txt\nUSER 101",
+    ),
+  );
   assert.doesNotMatch(docker, /COPY\s+\.\s|node_modules|README|\.git/);
   for (const line of docker.split("\n").filter((line) => line.startsWith("COPY "))) {
     for (const file of line.split(" ").slice(1, -1)) assert.ok(fs.existsSync(file), file);

@@ -8,6 +8,10 @@ test(
     const health = await fetch(`${base}/healthz`);
     assert.equal(health.status, 200);
     assert.equal(await health.text(), "ok\n");
+    const revision = await fetch(`${base}/revision.txt`);
+    assert.equal(revision.status, 200);
+    assert.equal(revision.headers.get("cache-control"), "no-cache");
+    assert.equal(await revision.text(), `${process.env.SITE_REVISION ?? "unknown"}\n`);
     for (const url of [
       "/",
       "/en/",
@@ -39,6 +43,8 @@ test(
       "/.git/config",
       "/tests/site.test.cjs",
       "/nginx.conf",
+      "/compose.yaml",
+      "/scripts/komodo-deploy.mjs",
       "/node_modules/prettier/package.json",
     ]) {
       const response = await fetch(base + url);
