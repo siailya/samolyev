@@ -1,9 +1,41 @@
+:root {
+  --background: #f3f0e8;
+  --text: #26343a;
+  --muted: #58686c;
+  --accent: #79602e;
+  --planet: #819296;
+  --surface: #ebe8df;
+  --border: #c7cdca;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --background: #182229;
+  --text: #e6e8e4;
+  --muted: #a9b8ba;
+  --accent: #dbc18c;
+  --planet: #6e858e;
+  --surface: #223039;
+  --border: #46565e;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --background: #182229;
+    --text: #e6e8e4;
+    --muted: #a9b8ba;
+    --accent: #dbc18c;
+    --planet: #6e858e;
+    --surface: #223039;
+    --border: #46565e;
+    color-scheme: dark;
+  }
+}
 * {
   box-sizing: border-box;
 }
 html {
-  background: #f3f0e8;
-  color: #26343a;
+  background: var(--background);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 body {
@@ -19,10 +51,10 @@ a {
   text-underline-offset: 5px;
 }
 a:hover {
-  color: #8c713d;
+  color: var(--accent);
 }
 a:focus-visible {
-  outline: 2px solid #8c713d;
+  outline: 2px solid var(--accent);
   outline-offset: 5px;
 }
 .top {
@@ -31,7 +63,7 @@ a:focus-visible {
   font:
     12px ui-monospace,
     monospace;
-  color: #68797c;
+  color: var(--muted);
 }
 .langs {
   display: flex;
@@ -39,7 +71,7 @@ a:focus-visible {
 }
 .langs a[aria-current] {
   font-weight: bold;
-  color: #26343a;
+  color: var(--text);
 }
 .hero {
   position: relative;
@@ -57,7 +89,7 @@ h1 {
   font:
     14px ui-monospace,
     monospace;
-  color: #68797c;
+  color: var(--muted);
   margin: 0 0 52px;
 }
 .role {
@@ -67,7 +99,7 @@ h1 {
 }
 .tagline {
   font-size: 17px;
-  color: #68797c;
+  color: var(--muted);
   margin: 0 0 26px;
 }
 .intro {
@@ -89,13 +121,13 @@ h1 {
     9px/1.2 ui-monospace,
     monospace;
   white-space: pre;
-  color: #819296;
+  color: var(--planet);
   pointer-events: none;
   z-index: -1;
 }
 .ai {
-  border-left: 3px solid #b49a61;
-  background: #ebe8df;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
   padding: 23px 27px;
   margin: 0 0 34px;
 }
@@ -105,7 +137,7 @@ h1 {
     monospace;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #68797c;
+  color: var(--muted);
 }
 .ai h2 {
   font-size: 19px;
@@ -121,15 +153,15 @@ h1 {
 .skills {
   font-size: 13px;
   line-height: 1.9;
-  color: #68797c;
+  color: var(--muted);
   margin: 0 0 42px;
 }
 .skills strong {
-  color: #26343a;
+  color: var(--text);
   font-weight: 500;
 }
 section.experience {
-  border-top: 1px solid #c7cdca;
+  border-top: 1px solid var(--border);
   padding-top: 24px;
 }
 .row {
@@ -137,7 +169,7 @@ section.experience {
   grid-template-columns: 180px 1fr auto;
   gap: 22px;
   padding: 19px 0;
-  border-bottom: 1px solid #dddcd5;
+  border-bottom: 1px solid var(--border);
 }
 .company {
   font-size: 20px;
@@ -148,13 +180,13 @@ section.experience {
   line-height: 1.5;
 }
 .row .summary {
-  color: #68797c;
+  color: var(--muted);
   font-size: 13px;
   margin-top: 4px;
 }
 .date {
   font-size: 12px;
-  color: #68797c;
+  color: var(--muted);
   white-space: nowrap;
   padding-top: 5px;
 }
@@ -166,7 +198,7 @@ section.experience {
 .scale {
   font-size: 12px;
   line-height: 1.7;
-  color: #68797c;
+  color: var(--muted);
   margin: 30px 0;
 }
 footer {
@@ -174,7 +206,7 @@ footer {
   font-size: 13px;
 }
 article {
-  border-top: 1px solid #c7cdca;
+  border-top: 1px solid var(--border);
   padding: 30px 0;
 }
 article h2 {
@@ -282,5 +314,51 @@ article ul {
   article p,
   article li {
     font-size: 15px;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.theme-control:not([hidden]) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px;
+}
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+@media (max-width: 400px) {
+  .top {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .controls {
+    gap: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

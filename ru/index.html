@@ -8,6 +8,7 @@
       name="description"
       content="Ilia Samoilov — Product Full-Stack Engineer. Go, JS, AdTech and AI-native workflows."
     />
+    <script src="../init.js"></script>
     <link rel="stylesheet" href="../style.css" />
     <link rel="alternate" hreflang="en" href="../en/index.html" />
     <script
@@ -21,10 +22,20 @@
     <main>
       <header class="top">
         <a href="index.html">samolyev.ru</a>
-        <nav class="langs" aria-label="Language">
-          <a href="../ru/index.html" aria-current="page" lang="ru">RU</a
-          ><a href="../en/index.html" lang="en">EN</a>
-        </nav>
+        <div class="controls">
+          <label class="theme-control" hidden>
+            <span>Тема</span>
+            <select id="theme" aria-label="Цветовая тема">
+              <option value="system">Система</option>
+              <option value="light">Светлая</option>
+              <option value="dark">Тёмная</option>
+            </select>
+          </label>
+          <nav class="langs" aria-label="Language">
+            <a href="../ru/index.html" aria-current="page" lang="ru">RU</a
+            ><a href="../en/index.html" lang="en">EN</a>
+          </nav>
+        </div>
       </header>
       <div class="hero">
         <ascii-art class="planet" piece="planet" aria-hidden="true">
@@ -49,7 +60,7 @@
 </pre>
         </ascii-art>
         <h1>Ilia Samoilov</h1>
-        <p class="alias">@samolyev / @siailya</p>
+        <p class="alias">@samolyev / <a href="https://t.me/siailya">@sialya</a></p>
         <p class="role">Продуктовый full-stack разработчик</p>
         <p class="tagline">Go &amp; JS · От идеи до продакшена</p>
         <p class="intro">
@@ -86,7 +97,11 @@
         <a class="all" href="experience.html">Весь опыт →</a>
       </section>
       <p class="scale">Тысячи RPS в пике · Целевое время ответа — десятки миллисекунд</p>
-      <footer><a href="https://github.com/siailya">GitHub ↗</a></footer>
+      <footer>
+        <a href="https://github.com/siailya">GitHub ↗</a>
+        <a href="https://t.me/siailya">Telegram ↗</a>
+        <a href="https://www.linkedin.com/in/siailya">LinkedIn ↗</a>
+      </footer>
     </main>
     <script src="../language.js" defer></script>
   </body>

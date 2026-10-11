@@ -1,0 +1,14 @@
+**
+!Dockerfile
+!nginx.conf
+!index.html
+!style.css
+!init.js
+!language.js
+!THIRD_PARTY_LICENSES.txt
+!en/
+!en/index.html
+!en/experience.html
+!ru/
+!ru/index.html
+!ru/experience.html

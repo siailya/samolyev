@@ -8,6 +8,7 @@
       name="description"
       content="Ilia Samoilov — Product Full-Stack Engineer. Go, JS, AdTech and AI-native workflows."
     />
+    <script src="../init.js"></script>
     <link rel="stylesheet" href="../style.css" />
     <link rel="alternate" hreflang="ru" href="../ru/experience.html" />
   </head>
@@ -15,10 +16,20 @@
     <main>
       <header class="top">
         <a href="index.html">samolyev.ru</a>
-        <nav class="langs" aria-label="Language">
-          <a href="../ru/experience.html" lang="ru">RU</a
-          ><a href="../en/experience.html" aria-current="page" lang="en">EN</a>
-        </nav>
+        <div class="controls">
+          <label class="theme-control" hidden>
+            <span>Theme</span>
+            <select id="theme" aria-label="Color theme">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </label>
+          <nav class="langs" aria-label="Language">
+            <a href="../ru/experience.html" lang="ru">RU</a
+            ><a href="../en/experience.html" aria-current="page" lang="en">EN</a>
+          </nav>
+        </div>
       </header>
       <a class="back" href="index.html">← Home</a>
       <h1 class="detail-title">Experience</h1>
@@ -129,7 +140,11 @@
           </li>
         </ul>
       </article>
-      <footer><a href="https://github.com/siailya">GitHub ↗</a></footer>
+      <footer>
+        <a href="https://github.com/siailya">GitHub ↗</a>
+        <a href="https://t.me/siailya">Telegram ↗</a>
+        <a href="https://www.linkedin.com/in/siailya">LinkedIn ↗</a>
+      </footer>
     </main>
     <script src="../language.js" defer></script>
   </body>
