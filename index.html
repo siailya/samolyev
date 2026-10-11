@@ -1,1 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ilia Samoilov</title></head><body><p><a href="en/index.html">English</a> / <a href="ru/index.html">Русский</a></p><script>let saved;try{saved=localStorage.getItem('language')}catch(e){}const preferred=saved==='ru'||saved==='en'?saved:(navigator.languages||[navigator.language]).find(x=>/^(ru|en)(-|$)/i.test(x))||'en';location.replace((/^ru/i.test(preferred)?'ru':'en')+'/index.html');</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ilia Samoilov</title>
+  </head>
+  <body>
+    <p><a href="en/index.html">English</a> / <a href="ru/index.html">Русский</a></p>
+    <script src="redirect.js" defer></script>
+  </body>
+</html>

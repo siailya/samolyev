@@ -18,9 +18,21 @@ python3 -m http.server 8000
 
 Open http://localhost:8000. No build step or package installation is required.
 
+## Formatting
+
+Node.js and npm are needed only for development formatting, not to serve the site.
+
+```sh
+npm ci
+npm run format
+npm run format:check
+```
+
+Prettier is pinned in the lockfile. HTML, CSS, JavaScript, JSON and Markdown use the repository configuration. The page scripts are kept in `language.js` and `redirect.js` rather than inline HTML.
+
 ## Current scope
 
-This is the current reviewed prototype. The decorative planet is a static ASCII frame, not yet animated. Only the confirmed GitHub contact URL is included. The Neutron Agency end date is intentionally omitted pending confirmation.
+This is the current reviewed prototype. The decorative planet uses the real ascii.rest animation (version 0.4.0, pinned on jsDelivr with Subresource Integrity). It pauses when off-screen or when the tab is hidden, and respects reduced-motion preferences. A static fallback remains visible if the library cannot load. Only the confirmed GitHub contact URL is included. The Neutron Agency end date is intentionally omitted pending confirmation.
 
 Publishing, DNS and hosting are not configured by this repository upload.
 
