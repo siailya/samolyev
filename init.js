@@ -1,4 +1,4 @@
-// Synchronous, before CSS: root routing and the initial palette only.
+// Synchronous, before CSS: apply the saved or system palette.
 (() => {
   const read = (key) => {
     try {
@@ -14,10 +14,6 @@
       // Current-page controls and direct links still work without storage.
     }
   };
-  const preferredLanguage = (saved, languages) =>
-    saved === "en" || saved === "ru"
-      ? saved
-      : languages.find((language) => /^(ru|en)(-|$)/i.test(language)) || "en";
   const validTheme = (value) =>
     ["light", "dark", "system"].includes(value) ? value : "system";
   const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
@@ -31,7 +27,6 @@
   window.sitePreferences = {
     read,
     write,
-    preferredLanguage,
     validTheme,
     getTheme: () => theme,
     setTheme(value) {
@@ -40,11 +35,4 @@
       applyTheme();
     },
   };
-  if (location.pathname === "/" || location.pathname === "/index.html") {
-    const language = preferredLanguage(
-      read("language"),
-      navigator.languages?.length ? navigator.languages : [navigator.language || "en"],
-    );
-    if (/^ru/i.test(language)) location.replace("/ru/");
-  }
 })();

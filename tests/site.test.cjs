@@ -1,7 +1,6 @@
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
-const path = require("node:path");
 const vm = require("node:vm");
 const source = fs.readFileSync("init.js", "utf8");
 const pages = [
@@ -53,31 +52,32 @@ function browser({
     theme: () => context.document.documentElement.dataset.theme,
   };
 }
-test("root prefers saved language, then ordered supported browser languages", () => {
+test("root stays English regardless of saved or browser language", () => {
   for (const pathname of ["/", "/index.html"]) {
-    assert.deepEqual(browser({ pathname, languages: ["ru-RU"] }).redirects, ["/ru/"]);
-    assert.deepEqual(
-      browser({ pathname, languages: ["ru-RU"], saved: { language: "en" } }).redirects,
-      [],
-    );
-    assert.deepEqual(browser({ pathname, saved: { language: "ru" } }).redirects, [
-      "/ru/",
-    ]);
+    for (const languages of [["ru-RU"], ["de", "RU-ru"], ["en", "ru"], ["fr"], []]) {
+      for (const language of ["ru", "en", "invalid", undefined]) {
+        for (const blocked of [false, true]) {
+          assert.deepEqual(
+            browser({ pathname, languages, saved: { language }, blocked }).redirects,
+            [],
+          );
+        }
+      }
+    }
   }
-  assert.deepEqual(
-    browser({ languages: ["de", "RU-ru"], saved: { language: "invalid" } }).redirects,
-    ["/ru/"],
-  );
-  assert.deepEqual(browser({ languages: ["en", "ru"] }).redirects, []);
-  assert.deepEqual(browser({ languages: ["fr"] }).redirects, []);
-  assert.deepEqual(browser({ languages: [], blocked: true }).redirects, []);
 });
 test("explicit locales and missing URLs never auto-redirect", () => {
   for (const pathname of [
+    "/en",
     "/en/",
+    "/ru",
     "/ru/",
     "/en/index.html",
     "/ru/index.html",
+    "/experience",
+    "/experience/",
+    "/ru/experience",
+    "/ru/experience/",
     "/en/experience.html",
     "/ru/experience.html",
     "/missing",
@@ -107,15 +107,15 @@ test("system theme initializes and updates; manual override persists until syste
   assert.equal(browser({ saved: { theme: "light" }, dark: true }).theme(), "light");
   assert.equal(browser({ saved: { theme: "invalid" }, dark: true }).theme(), "dark");
 });
-test("blocked localStorage leaves routing and theme controls functional", () => {
+test("blocked localStorage leaves explicit navigation and theme controls functional", () => {
   const b = browser({ blocked: true, languages: ["ru"] });
-  assert.deepEqual(b.redirects, ["/ru/"]);
+  assert.deepEqual(b.redirects, []);
   b.preferences.setTheme("dark");
   assert.equal(b.theme(), "dark");
   b.preferences.write("language", "en");
 });
-test("manual English link saves preference which overrides Russian browser on root", () => {
-  const b = browser({ pathname: "/ru/", languages: ["ru"] });
+test("explicit language switches save preference without routing the root", () => {
+  const b = browser({ pathname: "/ru", languages: ["ru"] });
   const link = {
     lang: "en",
     addEventListener(_, handler) {
@@ -133,11 +133,8 @@ test("manual English link saves preference which overrides Russian browser on ro
 test("all content is available without JS, initialization precedes CSS, local URLs exist", () => {
   for (const file of pages) {
     const html = fs.readFileSync(file, "utf8");
-    assert.ok(
-      html.indexOf('src="' + (file.includes("/") ? "../" : "") + 'init.js"') <
-        html.indexOf('rel="stylesheet"'),
-    );
-    assert.match(html, /<script src="(?:\.\.\/)?init.js"><\/script>/);
+    assert.ok(html.indexOf('src="/init.js"') < html.indexOf('rel="stylesheet"'));
+    assert.match(html, /<script src="\/init.js"><\/script>/);
     assert.match(html, /<main>/);
     assert.match(html, /Magnit/);
     assert.match(html, /Neutron Agency/);
@@ -152,12 +149,18 @@ test("all content is available without JS, initialization precedes CSS, local UR
     assert.match(html, /<button\s+id="theme"\s+class="theme-control"\s+type="button"/);
     for (const [, url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       if (/^https?:/.test(url)) continue;
-      const resolved = path.resolve(
-        path.dirname(file),
-        url === "/" ? "../index.html" : url,
-      );
-      const target = url === "/" ? "index.html" : resolved;
+      assert.ok(url.startsWith("/"), `${file}: root-relative URL required: ${url}`);
+      const routes = {
+        "/": "index.html",
+        "/ru": "ru/index.html",
+        "/experience": "en/experience.html",
+        "/ru/experience": "ru/experience.html",
+      };
+      const target = routes[url] ?? url.slice(1);
       assert.ok(fs.existsSync(target), `${file}: ${url}`);
+      if (!/\.(css|js|ico|png)$/.test(url)) {
+        assert.ok(Object.hasOwn(routes, url), `${file}: noncanonical page URL: ${url}`);
+      }
     }
     if (!file.includes("experience")) {
       assert.match(html, /<a href="https:\/\/t.me\/siailya">@siailya<\/a> \/ @samolyev/);
@@ -170,14 +173,41 @@ test("all content is available without JS, initialization precedes CSS, local UR
   const en = fs.readFileSync("en/index.html", "utf8");
   assert.equal(
     root.slice(root.indexOf('<div class="hero">'), root.indexOf("<footer>")),
-    en
-      .slice(en.indexOf('<div class="hero">'), en.indexOf("<footer>"))
-      .replace('href="experience.html"', 'href="en/experience.html"'),
+    en.slice(en.indexOf('<div class="hero">'), en.indexOf("<footer>")),
   );
   const css = fs.readFileSync("style.css", "utf8");
   assert.match(css, /:root:not\(\[data-theme\]\)/);
   assert.doesNotMatch(css, /opacity:\s*0(?:;|\s)|visibility:\s*hidden/);
 });
+test("every page declares its canonical URL and explicit locale links", () => {
+  for (const file of pages) {
+    const html = fs.readFileSync(file, "utf8");
+    const ru = file.startsWith("ru/");
+    const detail = file.includes("experience");
+    const canonical = detail ? `${ru ? "/ru" : ""}/experience` : ru ? "/ru" : "/";
+    assert.equal((html.match(/rel="canonical"/g) ?? []).length, 1);
+    assert.ok(html.includes(`rel="canonical" href="https://samolyev.ru${canonical}"`));
+    const alternate = html.match(
+      /<link rel="alternate" hreflang="(ru|en)" href="([^"]+)"/,
+    );
+    assert.equal(alternate[1], ru ? "en" : "ru");
+    assert.equal(
+      alternate[2],
+      detail ? `${ru ? "" : "/ru"}/experience` : ru ? "/" : "/ru",
+    );
+    const switches = html.match(/<nav class="langs"[^>]*>([\s\S]*?)<\/nav>/)[1];
+    for (const locale of ["ru", "en"]) {
+      const target = detail
+        ? `${locale === "ru" ? "/ru" : ""}/experience`
+        : locale === "ru"
+          ? "/ru"
+          : "/";
+      assert.match(switches, new RegExp(`href="${target}"[^>]*lang="${locale}"`));
+    }
+    assert.doesNotMatch(html, /href="[^"]*\.html(?:[?#][^"]*)?"/);
+  }
+});
+
 test("container has an explicit public asset allowlist and CI publishes only after checks", () => {
   const docker = fs.readFileSync("Dockerfile", "utf8");
   assert.match(docker, /FROM nginxinc\/nginx-unprivileged:1\.28\.0-alpine-slim/);

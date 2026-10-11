@@ -1,11 +1,15 @@
 # samolyev.ru
 
 A bilingual English/Russian personal website for Ilia Samoilov, built with plain
-HTML, CSS and JavaScript. It includes experience pages, saved language preferences,
+HTML, CSS and JavaScript. It includes explicit English/Russian language switches,
 System/Light/Dark themes and an animated ASCII planet that respects reduced motion.
 No application build step or backend is required.
 
-Run locally and open http://localhost:8000:
+Canonical homes are `/` (always English) and `/ru`; detailed experience lives at
+`/experience` and `/ru/experience`. Nginx permanently redirects legacy URLs.
+
+Preview the static home locally at http://localhost:8000 (clean experience routes
+and redirects require the Docker/Nginx setup below):
 
 ```sh
 python3 -m http.server 8000
