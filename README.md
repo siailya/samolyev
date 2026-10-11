@@ -10,7 +10,7 @@ Minimal bilingual personal website for Ilia Samoilov, built with plain HTML, CSS
 
 Explicit locale URLs never auto-redirect. Language links save the manual choice when storage is available; choosing EN overrides a Russian browser preference on later root visits. Blocked storage never prevents navigation or theme changes.
 
-The compact theme selector on every page offers System, Light and Dark. The initial theme is applied before CSS, follows system changes in System mode, and saves manual choices. Without JavaScript, CSS still follows the system theme. Content is always visible; optional reveals last 240ms and move only 4px. Reduced motion disables reveals, including when enabled during a visit.
+The compact theme button on every page cycles through System, Light and Dark, using local Lucide monitor, sun and moon SVG icons. Its tooltip and accessible label describe the current mode and the next one. The initial theme is applied before CSS, follows system changes in System mode, and saves manual choices. Without JavaScript, CSS still follows the system theme. Content is always visible; optional reveals last 240ms and move only 4px. Reduced motion disables reveals, including when enabled during a visit.
 
 The decorative planet keeps the real ascii.rest animation, pinned at 0.4.0 on jsDelivr with Subresource Integrity. It pauses off-screen or in a hidden tab, and respects reduced motion. The original static frame is the fallback when the CDN is unavailable. Its color follows the page theme on desktop and mobile.
 
@@ -52,8 +52,8 @@ Without that environment variable, `npm test` explicitly skips container integra
 
 - Disable JavaScript and open `/`: verify the full English homepage, experience link and contacts.
 - Clear the site's saved language, set the browser to Russian and open `/`: verify `/ru/`. Open `/en/` directly: it stays English. Click EN, then revisit `/`: it stays English.
-- Select System and change the OS color scheme: the palette updates. Select Light or Dark: system changes no longer override it. Reload to verify persistence; also try with storage blocked.
-- Test desktop and a narrow mobile viewport: the planet remains decorative behind the content, and links/selectors are keyboard accessible. Enable reduced motion: the planet is still and content reveals stop.
+- Switch to System and change the OS color scheme: the palette updates. Switch to Light or Dark: system changes no longer override it. Reload to verify persistence; also try with storage blocked.
+- Test desktop and a narrow mobile viewport: the planet remains decorative behind the content, and links and the theme button are keyboard accessible. Enable reduced motion: the planet is still and content reveals stop.
 
 ## CI and publishing
 
@@ -61,6 +61,8 @@ GitHub Actions runs dependency installation, formatting, regression tests, a con
 
 ## Content and attribution
 
-Existing experience facts are preserved; the Neutron Agency end date remains omitted pending confirmation. The displayed second nickname is exactly `@sialya`, linking to the supplied `https://t.me/siailya`. Footer contacts include GitHub, Telegram and LinkedIn.
+Existing experience facts are preserved; the Neutron Agency end date remains omitted pending confirmation. The displayed nicknames are `@siailya / @samolyev`, with the first linking to `https://t.me/siailya`. Footer contacts include GitHub, Telegram and LinkedIn.
 
 The decorative ASCII planet frame comes from [ascii.rest](https://ascii.rest/planet/), by bas3line, under the MIT license. See `THIRD_PARTY_LICENSES.txt`.
+
+Theme icons come from [Lucide](https://icones.js.org/collection/lucide) under the ISC license, with Feather-derived monitor and moon icons also covered by MIT. See `THIRD_PARTY_LICENSES.txt`.

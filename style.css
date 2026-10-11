@@ -59,6 +59,7 @@ a:focus-visible {
 }
 .top {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font:
     12px ui-monospace,
@@ -322,20 +323,26 @@ article ul {
   align-items: center;
   gap: 20px;
 }
-.theme-control:not([hidden]) {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-select {
-  font: inherit;
-  color: var(--text);
-  background: var(--background);
+.theme-control {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  color: var(--muted);
+  background: transparent;
   border: 1px solid var(--border);
-  border-radius: 3px;
-  padding: 4px;
+  border-radius: 6px;
+  cursor: pointer;
 }
-select:focus-visible {
+.theme-control:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-control:hover {
+  color: var(--text);
+  background: var(--surface);
+}
+.theme-control:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }

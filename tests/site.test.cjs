@@ -149,7 +149,7 @@ test("all content is available without JS, initialization precedes CSS, local UR
     ]) {
       assert.ok(html.slice(html.indexOf("<footer>")).includes(contact));
     }
-    assert.match(html, /<select id="theme" aria-label="[^"]+">/);
+    assert.match(html, /<button\s+id="theme"\s+class="theme-control"\s+type="button"/);
     for (const [, url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
       if (/^https?:/.test(url)) continue;
       const resolved = path.resolve(
@@ -160,7 +160,7 @@ test("all content is available without JS, initialization precedes CSS, local UR
       assert.ok(fs.existsSync(target), `${file}: ${url}`);
     }
     if (!file.includes("experience")) {
-      assert.match(html, /@samolyev \/ <a href="https:\/\/t.me\/siailya">@sialya<\/a>/);
+      assert.match(html, /<a href="https:\/\/t.me\/siailya">@siailya<\/a> \/ @samolyev/);
       assert.match(html, /piece="planet"/);
       assert.match(html, /ascii.rest@0.4.0\/dist\/ascii.js/);
       assert.match(html, /integrity="sha384-/);
